@@ -1,17 +1,64 @@
 import { Store } from '../core/heropy'
 
-const store = new Store({
+export interface SimpleMovie {
+  Title: string
+  Year: string
+  imdbID: string
+  Type: string
+  Poster: string
+}
+interface DetailedMovie {
+  Title: string
+  Year: string
+  Rated: string
+  Released: string
+  Runtime: string
+  Genre: string
+  Director: string
+  Writer: string
+  Actors: string
+  Plot: string
+  Language: string
+  Country: string
+  Awards: string
+  Poster: string
+  Ratings: {
+    map(arg0: (rating: { Source: any; Value: any }) => string): unknown
+    Source: string
+    Value: string
+  }
+  Metascore: string
+  imdbRating: string
+  imdbVotes: string
+  imdbID: string
+  Type: string
+  DVD: string
+  BoxOffice: string
+  Production: string
+  Website: string
+  Response: string
+}
+interface State {
+  searchText: string
+  page: number
+  pageMax: number
+  movies: SimpleMovie[]
+  movie: DetailedMovie
+  loading: boolean
+  message: string
+}
+const store = new Store<State>({
   searchText: '',
   page: 1,
   pageMax: 1,
   movies: [],
-  movie: {},
+  movie: {} as DetailedMovie,
   loading: false,
   message: 'Search for the movie title!'
 })
 
 export default store
-export const searchMovies = async page => {
+export const searchMovies = async (page: number) => {
   store.state.loading = true
   store.state.page = page
   if (page === 1) {
@@ -20,7 +67,6 @@ export const searchMovies = async page => {
   }
   try {
     // serverless와 통신
-    // const res = await fetch(`https://omdbapi.com?apikey=7035c60c&s=${store.state.searchText}&page=${page}`)
     const res = await fetch('/api/movie', {
       method: 'POST',
       body: JSON.stringify({
@@ -46,9 +92,8 @@ export const searchMovies = async page => {
     store.state.loading = false // loading 종료
   }
 }
-export const getMovieDetails = async id => {
+export const getMovieDetails = async (id: string) => {
   try {
-    // const res = await fetch(`https://omdbapi.com?apikey=${APIKEY}&i=${id}&plot=full`)
     const res = await fetch('/api/movie', {
       method: 'POST',
       body: JSON.stringify({
@@ -60,3 +105,5 @@ export const getMovieDetails = async id => {
     console.log('getMovieDetails error:', error)
   }
 }
+
+

@@ -38,8 +38,8 @@ export default class Movie extends Component {
             <div>
                 <h3>Ratings</h3>
                 ${movie.Ratings.map(rating => {
-                    return `<p>${rating.Source} - ${rating.Value}</p>`
-                }).join('')}
+            return `<p>${rating.Source} - ${rating.Value}</p>`
+          }).join('')}
             </div>
             <div>
                 <h3>Actors</h3>
